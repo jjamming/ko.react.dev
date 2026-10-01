@@ -147,7 +147,7 @@ async function main(frame) {
   const stream = await renderToReadableStream(<Document />);
   await flushReadableStreamToFrame(stream, frame);
 
-  // Wait so both the fallback and hydrated content are visible.
+  // 폴백과 하이드레이션된 콘텐츠가 모두 보이도록 대기합니다.
   await new Promise(resolve => setTimeout(resolve, 1200));
   hydrateRoot(frame.contentDocument, <Document />);
 }
@@ -301,9 +301,9 @@ const { pipe } = renderToPipeableStream(
 
 ---
 
-### Aborting pending server rendering for the browser {/*aborting-pending-server-rendering-for-the-browser*/}
+### 브라우저를 위해 대기 중인 서버 렌더링 중단하기 {/*aborting-pending-server-rendering-for-the-browser*/}
 
-If you call a server rendering API directly, you can stop waiting for pending content and let the browser finish rendering it. Pass the value returned by `browser` as the reason when aborting the server render. React then leaves pending Suspense boundaries in their fallback state and renders their content in the browser:
+서버 렌더링 API를 직접 호출한다면 대기 중인 콘텐츠를 더 기다리지 않고 브라우저가 렌더링을 마무리하도록 둘 수 있습니다. 서버 렌더링을 중단할 때 `browser`가 반환한 값을 `reason`으로 전달하세요. 그러면 React는 대기 중인 Suspense 경계를 폴백 상태로 남겨두고, 브라우저에서 해당 콘텐츠를 렌더링합니다.
 
 ```js {1,8}
 import { browser } from 'react-dom';
@@ -319,6 +319,6 @@ const { pipe, abort } = renderToPipeableStream(<App />, {
 });
 ```
 
-A `browser` abort reason does not trigger the server renderer's `onError` callback or `hydrateRoot`'s `onRecoverableError` callback. Instead, the server renderer reports each recovered Suspense boundary to `onBrowserBailout`.
+`browser` 중단 `reason`은 서버 렌더러의 `onError` 콜백이나 `hydrateRoot`의 `onRecoverableError` 콜백을 트리거하지 않습니다. 대신 서버 렌더러는 복구된 각 Suspense 경계를 `onBrowserBailout`에 보고합니다.
 
-For server rendering APIs that accept an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal), pass `browser()` as the reason to [`AbortController.abort`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort).
+[`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)을 받는 서버 렌더링 API에서는 [`AbortController.abort`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort)에 `browser()`를 `reason`으로 전달하세요.
